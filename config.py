@@ -7,8 +7,8 @@ Configuration module for AetherTracePoint
 """
 
 # 图形窗口设置 | Figure window settings
-WINDOW_TITLE = "AetherTrace: Nomi v1.0 — Specptr" # 窗口标题 | Window title
-FIGSIZE = (6, 3.5)              # 窗口尺寸 (宽, 高) | Figure size (width, height)
+WINDOW_TITLE = "AetherTrace: Nomi v1.1 — Specptr" # 窗口标题 | Window title
+FIGSIZE = (8, 3.4)              # 窗口尺寸 (宽, 高) | Figure size (width, height)
 FIG_BG = "#000000"          # 整体背景颜色 | Overall figure background color
 
 # 主图设置 | Main plot settings
@@ -26,3 +26,4 @@ SPEED_YLIM = 100              # 速度图纵轴最大值 | Maximum Y-axis value 
 # 布局比例（GridSpec）| Layout ratios (GridSpec)
 HEIGHT_RATIOS = [3, 4]        # 主图与速度图的垂直高度比例 | Vertical height ratio: main plot vs speed graph
 WIDTH_RATIOS = [3, 1.6]       # 主图与速度图的水平宽度比例 | Horizontal width ratio: main plot vs speed graph
+
