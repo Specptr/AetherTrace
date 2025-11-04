@@ -48,6 +48,10 @@ class AetherTracePoint:
 
         # 绑定鼠标事件 | Bind mouse click event
         self.fig.canvas.mpl_connect('button_press_event', self.on_click)
+        # 动画暂停状态 | Animation pause state
+        self.paused = False
+        # 绑定键盘事件 | Bind keyboard event
+        self.fig.canvas.mpl_connect('key_press_event', self.on_key_press)
 
         # 水印 | Watermark
         self.ax_main.text(0.1, -0.3, "Created by Specptr", fontsize=7, color='gray', alpha=0.5)
@@ -73,6 +77,9 @@ class AetherTracePoint:
 
     def update_frame(self, frame):
         """每帧更新逻辑 | Update logic for each frame"""
+        if self.paused:
+            return self.line, self.point, self.info_text, self.max_speed_text
+            
         dist = np.hypot(self.target_pos[0] - self.current_pos[0], self.target_pos[1] - self.current_pos[1])
         if dist < 0.15:
             # 到达目标点附近，生成新目标 | If close to target, assign new one
@@ -134,9 +141,25 @@ class AetherTracePoint:
 
         return self.line, self.point, self.info_text, self.max_speed_text
 
+    def on_key_press(self, event):
+        """键盘事件：按空格键切换暂停状态 | Toggle pause with Space key"""
+        if event.key == ' ':
+            self.paused = not self.paused
+            self.update_window_title()
+            print("Paused" if self.paused else "Resumed")
+
+    def update_window_title(self):
+        """更新窗口标题以显示暂停状态 | Update window title to reflect pause state"""
+        base_title = config.WINDOW_TITLE
+        if self.paused:
+            self.fig.canvas.manager.set_window_title(f"{base_title} [Paused]")
+        else:
+            self.fig.canvas.manager.set_window_title(base_title)
+
     def run(self):
         """启动动画 | Launch animation"""
         ani = FuncAnimation(self.fig, self.update_frame, init_func=self.init_frame, interval=10, blit=False)
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, wspace=0.3)
         plt.show()
+
 
