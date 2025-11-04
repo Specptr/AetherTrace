@@ -11,14 +11,19 @@ from . import config
 class AetherTracePoint:
     def __init__(self):
 
+        #Hello Nomi
         self.name = "Nomi"
+
+        # 情绪标签 | Nomi 情绪状态显示
+        self.mood_text = self.ax_main.text(11.5, 8.0, "", fontsize=9, ha='left', color='white')  # 情绪文本 | Mood label
 
         # 初始化图形窗口与子图布局 | Initialize figure and layout
         self.fig = plt.figure(figsize=config.FIGSIZE)
         self.fig.canvas.manager.set_window_title(config.WINDOW_TITLE)
-        gs = gridspec.GridSpec(2, 2, height_ratios=config.HEIGHT_RATIOS, width_ratios=config.WIDTH_RATIOS)
+        gs = gridspec.GridSpec(2, 3, height_ratios=config.HEIGHT_RATIOS, width_ratios=[2, 1, 1])
         self.ax_main = self.fig.add_subplot(gs[:, 0])   # 主图区域 | Main plot
-        self.ax_speed = self.fig.add_subplot(gs[1, 1])  # 速度图区域 | Speed graph
+        self.ax_speed = self.fig.add_subplot(gs[1, 2])  # 速度图区域 | Speed graph
+        self.ax_mood = self.fig.add_subplot(gs[1, 1])   # 情绪图区域 | Mood plot
 
         # 主图设置 | Configure main plot
         self.ax_main.set_xlim(0, 10)
@@ -52,6 +57,18 @@ class AetherTracePoint:
         self.paused = False
         # 绑定键盘事件 | Bind keyboard event
         self.fig.canvas.mpl_connect('key_press_event', self.on_key_press)
+
+        self.mood_history = []  # 情绪轨迹数据 | Mood history
+        self.ax_mood.set_facecolor(config.SPEED_BG)
+        self.ax_mood.set_xlim(0, config.SPEED_HISTORY)
+        self.ax_mood.set_ylim(-0.5, 4.5)
+        self.ax_mood.set_yticks(range(5))
+        self.ax_mood.set_yticklabels(["😴 Calm", "☺️ Relaxed", "😃 Active", "😮 Energetic", "😆 Excited"], fontsize=9)
+        self.ax_mood.tick_params(colors='white')
+        self.ax_mood.set_xticks([])
+        for spine in self.ax_mood.spines.values():
+            spine.set_color('white')
+        self.ax_mood.set_title("Mood", color='white', fontsize=9)
 
         # 水印 | Watermark
         self.ax_main.text(0.1, -0.3, "Created by Specptr", fontsize=7, color='gray', alpha=0.5)
@@ -139,6 +156,38 @@ class AetherTracePoint:
         for spine in self.ax_speed.spines.values():
             spine.set_color('white')
 
+        # 基于速度图平均值判断情绪 | Mood based on speed graph average
+        mood = self.get_mood(avg_speed)
+        self.mood_text.set_text(f"Mood: {mood}")
+
+        # 获取当前情绪 | Get current mood
+        self.mood_history.append(avg_speed)
+        if len(self.mood_history) > config.SPEED_HISTORY:
+            self.mood_history.pop(0)
+
+       # 绘制情绪图 | Draw mood plot
+        self.ax_mood.clear()
+        self.ax_mood.set_facecolor(config.SPEED_BG)
+        self.ax_mood.set_xlim(max(0, len(self.mood_history) - config.SPEED_HISTORY), len(self.mood_history))
+        self.ax_mood.set_ylim(0, 30)
+        emoji_marks = {5: "😐", 10: "☺️", 15: "😃", 20: "😮", 25: "😆"}
+        self.ax_mood.set_yticks(list(emoji_marks.keys()))
+        self.ax_mood.set_yticklabels(list(emoji_marks.values()), fontsize=9)
+        self.ax_mood.set_title("Mood", color='white', fontsize=9)
+        self.ax_mood.tick_params(colors='white')
+        self.ax_mood.set_xticks([])
+        for spine in self.ax_mood.spines.values():
+            spine.set_color('white')
+
+        # 平滑曲线 | Smooth curve
+        if len(self.mood_history) >= 2:
+            x = np.arange(len(self.mood_history))
+            x_smooth = np.linspace(x.min(), x.max(), len(x) * 10)
+            y_smooth = np.interp(x_smooth, x, self.mood_history)
+            self.ax_mood.plot(x_smooth, y_smooth, color='orange', linewidth=0.6)
+        elif len(self.mood_history) == 1:
+            self.ax_mood.plot([0], [self.mood_history[0]], 'o', color='orange', markersize=3)
+
         return self.line, self.point, self.info_text, self.max_speed_text
 
     def on_key_press(self, event):
@@ -156,10 +205,21 @@ class AetherTracePoint:
         else:
             self.fig.canvas.manager.set_window_title(base_title)
 
+        def get_mood(self, speed):
+        """根据速度返回 Nomi 的情绪状态 | Return Nomi's mood based on speed"""
+        if speed < 5:
+            return "😴 Calm"
+        elif speed < 10:
+            return "🙂 Relaxed"
+        elif speed < 15:
+            return "😃 Active"
+        elif speed < 20:
+            return "😮 Energetic"
+        else:
+            return "🚀 Excited"
+
     def run(self):
         """启动动画 | Launch animation"""
         ani = FuncAnimation(self.fig, self.update_frame, init_func=self.init_frame, interval=10, blit=False)
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, wspace=0.3)
         plt.show()
-
-
