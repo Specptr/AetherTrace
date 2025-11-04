@@ -49,6 +49,9 @@ class AetherTracePoint:
         # 绑定鼠标事件 | Bind mouse click event
         self.fig.canvas.mpl_connect('button_press_event', self.on_click)
 
+        # 水印 | Watermark
+        self.ax_main.text(0.1, -0.3, "Created by Specptr", fontsize=7, color='gray', alpha=0.5)
+
     def on_click(self, event):
         """鼠标点击事件：设置新目标点 | Mouse click event: assign new target"""
         if event.inaxes == self.ax_main and event.xdata is not None and event.ydata is not None:
@@ -136,3 +139,4 @@ class AetherTracePoint:
         ani = FuncAnimation(self.fig, self.update_frame, init_func=self.init_frame, interval=10, blit=False)
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, wspace=0.3)
         plt.show()
+
