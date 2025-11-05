@@ -30,7 +30,7 @@ G：启用鼠标引导模式，让 Nomi 跟随光标
 R：刷新目标点
 当前模式会显示在窗口标题中。
 系统实时记录 Nomi 的位置与速度，并在右侧绘制速度曲线。曲线保留最近 200 帧数据（约 2 秒），每 50 帧更新一次最大速度。平均速度以虚线标注，最大速度文字颜色随近期峰值变化（白 → 黄 → 红 → 深红），反映运动强度。
-程序内置情绪系统，根据最近平均速度判断 Nomi 的“状态”，共五档：Calm、Relaxed、Active、Energetic、Excited。情绪状态显示在主图文本区域，并以橙色 emoji 曲线形式呈现在情绪图中，突出短期变化。
+程序内置情绪系统，根据最近平均速度判断 Nomi 的“情绪值”，共五档：Calm、Relaxed、Active、Energetic、Excited。情绪状态显示在主图文本区域，并以橙色 emoji 曲线形式呈现在情绪图中，突出短期变化。
 文本信息区域显示目标距离，包括新目标的初始距离与当前距离。水印旁附暂停提示。视觉上，Nomi 的体积和轨迹略微缩小，布局调整以容纳情绪图，使画面更紧凑清晰。
 
 Nomi is a continuously moving point in a 2D plane, driven by four core systems: target navigation, speed control, user interaction, and visual feedback.
