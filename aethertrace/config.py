@@ -1,6 +1,5 @@
 """
-配置模块
-Config
+配置模块（Config）
 集中管理项目中的颜色、尺寸、速度范围等参数
 Configuration module for AetherTracePoint
 """
@@ -47,7 +46,7 @@ LINE_COLOR = "#7E7E7E" # 主图线条颜色 | Main plot line color
 POINT_COLOR = "#FFFFFF" # 主图点颜色 | Main plot point color
 TEXT_COLOR = "#FFFFFF" # 主图文本颜色 | Main plot text color
 FOOTNOTE_COLOR = "#DDDDDD" # 主图脚注颜色 | Main plot footnote color
-PAUSE_BG_COLOR = "#0D0D0D" # 暂停背景色 | Pause background color
+PAUSE_BG_COLOR = "#111111" # 暂停背景色 | Pause background color
 RESUME_BG_COLOR = "#1B1B1B" # 恢复背景色 | Resume background color
 
 # ─────────────────────────────────────────────
