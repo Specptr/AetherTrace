@@ -19,7 +19,7 @@ that visualizes a moving point's trajectory and speed in real time,
 with interactive target setting and aesthetic enhancements.
 
 ---
-## 项目原理 | Motion Principle
+## 项目具体描述 | Detailed Project Description
 Nomi 是一个在二维平面中持续运动的点。  
 Nomi is a continuously moving point in a 2D plane.
 
