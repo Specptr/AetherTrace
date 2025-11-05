@@ -57,8 +57,8 @@ class AetherTracePoint:
         self.ax_mood.set_title(config.MOOD_TITLE, color=config.MOOD_TITLE_COLOR, fontsize=config.MOOD_TITLE_SIZE)   # 标题 | Title
 
         # 图形元素 | Visual elements
-        self.line, = self.ax_main.plot([], [], lw=2, color=config.LINE_COLOR)   # 轨迹线 | Trajectory line
-        self.point, = self.ax_main.plot([], [], 'o', color=config.POINT_COLOR, markersize=1)    # 当前点 | Current point (Nomi)
+        self.point, = self.ax_main.plot([], [], 'o', color=config.POINT_COLOR, markersize=config.POINT_SIZE)    # 当前点 | Current point (Nomi)
+        self.line, = self.ax_main.plot([], [], lw=config.LINE_WIDTH, color=config.LINE_COLOR)  # 轨迹线 | Trajectory line
 
         self.info_text = self.ax_main.text(11.5, 9, "", fontsize=9, ha='left', color=config.TEXT_COLOR)   # 信息文本 | Info text
         self.max_speed_text = self.ax_main.text(11.5, 8.5, "", fontsize=9, ha='left')   # 最大速度文本 | Max speed text
