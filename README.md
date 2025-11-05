@@ -8,15 +8,12 @@ November 3, 2025
 AetherTrace 是一个交互式运动可视化项目，
 旨在学习 `matplotlib` 库的使用。
 项目最初用于展示单位正方形内的随机点运动，
-后来逐步扩展为一个动态系统，
-具备轨迹追踪、速度分析、交互控制与美学设计等功能。
+后来逐步扩展为一个可交互式动态系统。
 
-AetherTrace is an interactive motion visualization project
-designed to explore and master the `matplotlib` library.
-It began as a simple animation of random points within a unit square,
-and gradually evolved into a dynamic system
-that visualizes a moving point's trajectory and speed in real time,
-with interactive target setting and aesthetic enhancements.
+AetherTrace is an interactive motion visualization project 
+designed to explore and learn the use of the `matplotlib` library. 
+It began as a simple demonstration of random point movement within a unit square, 
+and gradually evolved into an interactive dynamic system.
 
 ---
 ## 项目具体描述 | Detailed Project Description
