@@ -2,6 +2,7 @@
 
 November 3, 2025
 
+---
 ## 项目简介 | Project Overview
 
 AetherTrace 是一个交互式运动可视化项目，
@@ -18,75 +19,38 @@ that visualizes a moving point's trajectory and speed in real time,
 with interactive target setting and aesthetic enhancements.
 
 ---
+##项目原理 | Motion Principle
 
-## 项目原理 | Motion Principle
+Nomi 是一个在二维平面中持续运动的点，具备目标导航、速度调节、用户交互和视觉反馈四个核心机制。程序启动后，Nomi 会在一个 10×10 单位区域内随机选择目标并向其移动。每帧间隔 10 毫秒，速度为目标距离的 0.01–0.2 倍（单位：单位/帧 ×100）。当与目标距离小于 0.15 时，会自动生成新的目标点以保持连续运动。
+用户可通过鼠标点击设置新目标。此时 Nomi 会以更高速度（0.1–0.2 单位/帧）快速冲向目标，形成加速效果。
+键盘交互包括：
+Space：暂停 / 恢复动画（暂停时画面变暗）
+T：切换网格与目标点显示
+G：启用鼠标引导模式，让 Nomi 跟随光标
+R：刷新目标点
+当前模式会显示在窗口标题中。
+系统实时记录 Nomi 的位置与速度，并在右侧绘制速度曲线。曲线保留最近 200 帧数据（约 2 秒），每 50 帧更新一次最大速度。平均速度以虚线标注，最大速度文字颜色随近期峰值变化（白 → 黄 → 红 → 深红），反映运动强度。
+程序内置情绪系统，根据最近平均速度判断 Nomi 的“状态”，共五档：Calm、Relaxed、Active、Energetic、Excited。情绪状态显示在主图文本区域，并以橙色 emoji 曲线形式呈现在情绪图中，突出短期变化。
+文本信息区域显示目标距离，包括新目标的初始距离与当前距离。水印旁附暂停提示。视觉上，Nomi 的体积和轨迹略微缩小，布局调整以容纳情绪图，使画面更紧凑清晰。
 
-程序启动后，动点Nomi将在一个 10×10 的单位正方形区域内开始运动。
-它会以每帧 0.01 到 0.2 倍距离的速度向一个随机生成的目标点移动。
-每帧间隔为 10 毫秒，因此速度单位为 **图像坐标单位/帧 × 100**，用于放大视觉效果。
-
-当 Nomi 距离目标点小于 0.1 单位时，系统会自动生成一个新的目标点，保持运动的连续性。
-
-整个运动过程中，Nomi 的坐标和速度会被实时记录，并绘制在右侧的速度图中。
-该图每帧更新一次，保留最近 200 帧（约 2 秒）的速度数据，并每 50 帧重新计算一次最大速度。
-平均速度也会被计算并以虚线标注。
-
-用户可以通过鼠标点击主图区域，为 Nomi 设置新的目标点。
-此时 Nomi 会以更高的速度（0.1 到 0.2 单位/帧）快速冲向目标，形成明显的加速效果。
-
-为了增强可视化效果，系统会根据最近 0.5 秒（约 50 帧）内的最大速度值，动态调整最大速度文本的颜色。
-颜色映射遵循以下渐变逻辑：
-**白色 → 黄色 → 红色 → 深红色**，用于直观反映运动强度。
-
-Upon launching the program, the moving point Nomi begins navigating within a 10×10 unit square.
-It moves toward a randomly generated target at a speed ranging from 0.01 to 0.2 times the distance per frame.
-Each frame interval is 10 milliseconds, so the speed unit is **units/frame × 100**, scaled for visual clarity.
-
-When Nomi gets within 0.1 units of the target, a new random target is automatically assigned to maintain continuous motion.
-
-Throughout the animation, Nomi’s position and speed are tracked in real time.
-A side graph displays the speed history, updating every frame and retaining the latest 200 frames (≈2 seconds).
-Maximum speed is recalculated every 50 frames, and the average speed is marked with a dashed reference line.
-
-Users can interact by clicking anywhere in the main plot to assign a new target.
-In response, Nomi accelerates toward the clicked location at a higher speed (0.1 to 0.2 units/frame),
-creating a burst-like motion.
-
-To enhance visual feedback, the color of the maximum speed label dynamically reflects the peak speed within the last 0.5 seconds (≈50 frames).
-The color transitions through the following gradient:
-**White → Yellow → Red → Dark Red**, intuitively representing motion intensity.
-
-## 快速体验 | Quick Start (Windows Executable)
-
-如果你只想直接体验程序，无需安装 Python，可下载打包好的 `.exe` 文件：  
-[点击这里下载 AetherTrace.exe](https://github.com/Specptr/AetherTrace/releases/download/v1.1.1/AetherTrace_1.1.1.exe)
-
-下载后双击运行即可。
+Nomi is a continuously moving point in a 2D plane, driven by four core systems: target navigation, speed control, user interaction, and visual feedback.
+At launch, Nomi moves within a 10×10 unit area toward a randomly generated target. Each frame updates every 10 ms, and the movement speed is 0.01–0.2 times the target distance (units/frame ×100).
+When the distance to the target falls below 0.15 units, a new target is automatically generated to maintain continuous motion.
+Users can set a new target by clicking on the main plot. Nomi will accelerate toward it at a higher speed (0.1–0.2 units/frame), creating a burst motion.
+Keyboard controls:
+Space — Pause / Resume animation (screen dims when paused)
+T — Toggle grid and target visibility
+G — Enable mouse-guided mode (Nomi follows cursor)
+R — Refresh target instantly
+The current mode is shown in the window title.
+Nomi’s position and velocity are tracked in real time and plotted on a speed graph. The graph keeps the latest 200 frames (~2 seconds) and updates the max speed every 50 frames. The average speed is marked with a dashed line, while the max-speed label color shifts (white → yellow → red → dark red) to visualize recent intensity.
+A built-in mood system maps recent average speed to five emotional states: Calm, Relaxed, Active, Energetic, and Excited.
+The current mood is displayed in the main plot and visualized in a separate mood graph with orange emoji markers emphasizing short-term changes.
+The text area shows distance metrics — the initial distance to each new target and the real-time distance to the current one.
+A pause hint is displayed near the watermark.
+Visually, Nomi’s size and trail are slightly reduced, and the layout is optimized to fit the mood graph for a more compact and balanced interface.
 
 ---
-
-## 版本历史 | Version History
-
-### v1.1.1 · Target Refinement（2025-11-05）
-- 新增目标距离提示文字，实时显示剩余距离（已减去触发阈值 0.15）
-- 新增“下一目标”提示，每次生成新目标时显示初始距离
-- 修复首次启动时目标距离信息缺失的问题
-- 优化距离计算逻辑，避免误触发目标更新
-
-- Added `Distance to Target` label showing remaining distance (adjusted by 0.15 threshold)  
-- Added `Next Target` label showing initial distance when a new target is generated  
-- Fixed missing distance info on startup  
-- Refined distance logic to decouple display from trigger condition
-
-### v1.1 · Mood Integration（2025-11-04）
-- 引入情绪系统，根据速度自动判断并显示五级情绪状态（Calm → Excited）
-- 新增情绪子图，绘制情绪变化曲线，支持 emoji 标签与白色主题
-- 子图布局从 2×2 调整为 2×3，整合情绪可视化区域
-
-- Introduced mood system with 5-level emotional states based on speed  
-- Added mood subplot with emoji labels and smooth trend visualization  
-- Updated subplot layout from 2×2 to 2×3 to accommodate mood panel
-
 ## 致谢 | Acknowledgements
 
 本项目的中英双语翻译由 Copilot 协助完成 Bilingual translation supported by Copilot
