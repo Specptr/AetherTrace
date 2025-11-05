@@ -59,7 +59,7 @@ The color transitions through the following gradient:
 ## 快速体验 | Quick Start (Windows Executable)
 
 如果你只想直接体验程序，无需安装 Python，可下载打包好的 `.exe` 文件：  
-[点击这里下载 AetherTrace.exe](https://github.com/Specptr/AetherTrace/releases/download/v1.1.1/AetherTrace_v1.1.1.exe)
+[点击这里下载 AetherTrace.exe](https://github.com/Specptr/AetherTrace/releases/download/v1.1.1/AetherTrace_1.1.1.exe)
 
 下载后双击运行即可。
 
