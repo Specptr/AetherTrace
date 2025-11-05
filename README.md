@@ -19,7 +19,7 @@ that visualizes a moving point's trajectory and speed in real time,
 with interactive target setting and aesthetic enhancements.
 
 ---
-##项目原理 | Motion Principle
+## 项目原理 | Motion Principle
 
 Nomi 是一个在二维平面中持续运动的点，具备目标导航、速度调节、用户交互和视觉反馈四个核心机制。程序启动后，Nomi 会在一个 10×10 单位区域内随机选择目标并向其移动。每帧间隔 10 毫秒，速度为目标距离的 0.01–0.2 倍（单位：单位/帧 ×100）。当与目标距离小于 0.15 时，会自动生成新的目标点以保持连续运动。
 用户可通过鼠标点击设置新目标。此时 Nomi 会以更高速度（0.1–0.2 单位/帧）快速冲向目标，形成加速效果。
