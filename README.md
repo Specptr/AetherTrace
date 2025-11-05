@@ -56,13 +56,36 @@ To enhance visual feedback, the color of the maximum speed label dynamically ref
 The color transitions through the following gradient:
 **White → Yellow → Red → Dark Red**, intuitively representing motion intensity.
 
-
 ## 快速体验 | Quick Start (Windows Executable)
 
-如果你只想直接体验程序，无需安装 Python，可下载打包好的 `.exe` 文件：
-[点击这里下载 AetherTrace.exe](https://github.com/Specptr/AetherTrace/releases/download/v1.0/AetherTrace_v1.0.exe)
+如果你只想直接体验程序，无需安装 Python，可下载打包好的 `.exe` 文件：  
+[点击这里下载 AetherTrace.exe](https://github.com/Specptr/AetherTrace/releases/download/v1.1.1/AetherTrace_v1.1.1.exe)
 
 下载后双击运行即可。
+
+---
+
+## 版本历史 | Version History
+
+### v1.1.1 · Target Refinement（2025-11-05）
+- 新增目标距离提示文字，实时显示剩余距离（已减去触发阈值 0.15）
+- 新增“下一目标”提示，每次生成新目标时显示初始距离
+- 修复首次启动时目标距离信息缺失的问题
+- 优化距离计算逻辑，避免误触发目标更新
+
+- Added `Distance to Target` label showing remaining distance (adjusted by 0.15 threshold)  
+- Added `Next Target` label showing initial distance when a new target is generated  
+- Fixed missing distance info on startup  
+- Refined distance logic to decouple display from trigger condition
+
+### v1.1 · Mood Integration（2025-11-04）
+- 引入情绪系统，根据速度自动判断并显示五级情绪状态（Calm → Excited）
+- 新增情绪子图，绘制情绪变化曲线，支持 emoji 标签与白色主题
+- 子图布局从 2×2 调整为 2×3，整合情绪可视化区域
+
+- Introduced mood system with 5-level emotional states based on speed  
+- Added mood subplot with emoji labels and smooth trend visualization  
+- Updated subplot layout from 2×2 to 2×3 to accommodate mood panel
 
 ## 致谢 | Acknowledgements
 
