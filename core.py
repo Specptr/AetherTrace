@@ -7,15 +7,13 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.gridspec as gridspec
 from .utils import speed_to_color
 from . import config
+from matplotlib.collections import LineCollection
 
 class AetherTracePoint:
     def __init__(self):
 
         #Hello Nomi
         self.name = "Nomi"
-
-        # 情绪标签 | Nomi 情绪状态显示
-        self.mood_text = self.ax_main.text(11.5, 8.0, "", fontsize=9, ha='left', color='white')  # 情绪文本 | Mood label
 
         # 初始化图形窗口与子图布局 | Initialize figure and layout
         self.fig = plt.figure(figsize=config.FIGSIZE)
@@ -42,6 +40,11 @@ class AetherTracePoint:
         self.point, = self.ax_main.plot([], [], 'o', color=config.POINT_COLOR, markersize=1)  # 当前点 | Current point
         self.info_text = self.ax_main.text(11.5, 9, "", fontsize=9, ha='left', color='white')  # 坐标与速度信息 | Position & speed
         self.max_speed_text = self.ax_main.text(11.5, 8.5, "", fontsize=9, ha='left')          # 最大速度文本 | Max speed label
+        self.mood_text = self.ax_main.text(11.5, 8.0, "", fontsize=9, ha='left', color='white')  # 情绪文本 | Mood label
+        self.next_target_text = self.ax_main.text(11.5, 7.5, "", fontsize=9, ha='left', color='white')  # 下一目标提示
+        self.distance_text = self.ax_main.text(11.5, 7.0, "", fontsize=9, ha='left', color='white')  # 距离信息 | Distance to target
+        self.ax_main.text(0.1, -0.3, "Created by Specptr", fontsize=7, color="#DDDDDD", alpha=0.5) # 水印 | Watermark
+        self.ax_main.text(4.5, -0.3, "Press [Space] to pause/resume", fontsize=7, color="#DDDDDD", alpha=0.5) # 提示文字 | Hint text
 
         # 数据初始化 | Initialize data
         self.current_pos = [random.uniform(0, 10), random.uniform(0, 10)]  # 当前坐标 | Current position
@@ -70,17 +73,14 @@ class AetherTracePoint:
             spine.set_color('white')
         self.ax_mood.set_title("Mood", color='white', fontsize=9)
 
-        # 水印 | Watermark
-        self.ax_main.text(0.1, -0.3, "Created by Specptr", fontsize=7, color='gray', alpha=0.5)
-
     def on_click(self, event):
-        """鼠标点击事件：设置新目标点 | Mouse click event: assign new target"""
+        #鼠标点击事件：设置新目标点 | Mouse click event: assign new target
         if event.inaxes == self.ax_main and event.xdata is not None and event.ydata is not None:
             self.target_pos = [event.xdata, event.ydata]
             self.target_speed = random.uniform(0.1, 0.2)  # 鼠标点击时速度更快 | Faster speed on click
 
     def init_frame(self):
-        """初始化动画帧 | Initialize animation frame"""
+        #初始化动画帧 | Initialize animation frame
         self.line.set_data([], [])
         self.point.set_data([], [])
         self.info_text.set_text("")
@@ -90,18 +90,27 @@ class AetherTracePoint:
         self.ax_speed.clear()
         self.ax_speed.set_xlim(0, config.SPEED_HISTORY)
         self.ax_speed.set_ylim(0, config.SPEED_YLIM)
-        return self.line, self.point, self.info_text, self.max_speed_text
+        self.distance_text.set_text("")
+        dist = np.hypot(self.target_pos[0] - self.current_pos[0], self.target_pos[1] - self.current_pos[1])
+        self.next_target_text.set_text(f"Next Target: {dist:.2f}")
+        return self.line, self.point, self.info_text, self.max_speed_text, self.distance_text, self.next_target_text
 
     def update_frame(self, frame):
-        """每帧更新逻辑 | Update logic for each frame"""
+        #每帧更新逻辑 | Update logic for each frame
         if self.paused:
-            return self.line, self.point, self.info_text, self.max_speed_text
-            
+            return self.line, self.point, self.info_text, self.max_speed_text, self.distance_text, self.next_target_text
+
         dist = np.hypot(self.target_pos[0] - self.current_pos[0], self.target_pos[1] - self.current_pos[1])
+        adjusted_dist = max(0.0, dist - 0.14)
+        self.distance_text.set_text(f"Distance to Target: {adjusted_dist:.2f}")
+
         if dist < 0.15:
             # 到达目标点附近，生成新目标 | If close to target, assign new one
             self.target_pos = [random.uniform(0, 10), random.uniform(0, 10)]
             self.target_speed = random.uniform(0.01, 0.2)
+            new_dist = np.hypot(self.target_pos[0] - self.current_pos[0], self.target_pos[1] - self.current_pos[1])
+            self.next_target_text.set_text(f"Next Target: {new_dist:.2f}")
+
 
         # 计算位移 | Calculate displacement
         dx = (self.target_pos[0] - self.current_pos[0]) * self.target_speed
@@ -154,16 +163,23 @@ class AetherTracePoint:
 
         # 设置边框颜色 | Set spine colors
         for spine in self.ax_speed.spines.values():
-            spine.set_color('white')
+            spine.set_color('#ffffff')
 
         # 基于速度图平均值判断情绪 | Mood based on speed graph average
         mood = self.get_mood(avg_speed)
         self.mood_text.set_text(f"Mood: {mood}")
 
+        """
         # 获取当前情绪 | Get current mood
         self.mood_history.append(avg_speed)
         if len(self.mood_history) > config.SPEED_HISTORY:
-            self.mood_history.pop(0)
+            self.mood_history.pop(0)"""
+
+        for _ in range(2):  # 每帧推进 5 个单位
+            self.mood_history.append(avg_speed)
+            if len(self.mood_history) > config.SPEED_HISTORY:
+                self.mood_history.pop(0)
+
 
        # 绘制情绪图 | Draw mood plot
         self.ax_mood.clear()
@@ -188,38 +204,38 @@ class AetherTracePoint:
         elif len(self.mood_history) == 1:
             self.ax_mood.plot([0], [self.mood_history[0]], 'o', color='orange', markersize=3)
 
-        return self.line, self.point, self.info_text, self.max_speed_text
+        return self.line, self.point, self.info_text, self.max_speed_text, self.distance_text, self.next_target_text
 
     def on_key_press(self, event):
-        """键盘事件：按空格键切换暂停状态 | Toggle pause with Space key"""
+        #键盘事件：按空格键切换暂停状态 | Toggle pause with Space key
         if event.key == ' ':
             self.paused = not self.paused
             self.update_window_title()
             print("Paused" if self.paused else "Resumed")
 
     def update_window_title(self):
-        """更新窗口标题以显示暂停状态 | Update window title to reflect pause state"""
+        #更新窗口标题以显示暂停状态 | Update window title to reflect pause state
         base_title = config.WINDOW_TITLE
         if self.paused:
-            self.fig.canvas.manager.set_window_title(f"{base_title} [Paused]")
+            self.fig.canvas.manager.set_window_title(f"{base_title} [Nomi Frozen]")
         else:
             self.fig.canvas.manager.set_window_title(base_title)
 
-        def get_mood(self, speed):
-        """根据速度返回 Nomi 的情绪状态 | Return Nomi's mood based on speed"""
+    def get_mood(self, speed):
+        #根据速度返回 Nomi 的情绪状态 | Return Nomi's mood based on speed
         if speed < 5:
-            return "😴 Calm"
+            return "😐 Calm"
         elif speed < 10:
-            return "🙂 Relaxed"
+            return "☺️ Relaxed"
         elif speed < 15:
             return "😃 Active"
         elif speed < 20:
             return "😮 Energetic"
         else:
-            return "🚀 Excited"
+            return "😆 Excited"
 
     def run(self):
-        """启动动画 | Launch animation"""
+        #启动动画 | Launch animation
         ani = FuncAnimation(self.fig, self.update_frame, init_func=self.init_frame, interval=10, blit=False)
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, wspace=0.3)
         plt.show()
