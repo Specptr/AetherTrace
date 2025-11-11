@@ -2,6 +2,8 @@
 
 November 3, 2025
 
+![Nomi png](assets/Nomi.png)
+
 ---
 ## 项目简介 | Project Overview
 
@@ -16,6 +18,9 @@ It began as a simple demonstration of random point movement within a unit square
 and gradually evolved into an interactive dynamic system.
 
 ---
+
+![运行实例](assets/运行截图.png)
+
 ## 项目具体描述 | Detailed Project Description
 Nomi 是一个在二维平面中持续运动的点。  
 Nomi is a continuously moving point in a 2D plane.
